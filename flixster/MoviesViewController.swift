@@ -7,12 +7,20 @@
 
 import UIKit
 
-class MoviesViewController: UIViewController {
+/**Step #1 is implementing UITableViewDataSource, UITableViewDelegate */
 
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+    @IBOutlet weak var tableView: UITableView!
+    
     var movies = [[String:Any]]()
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /*Step#3: Add this items*/
+        tableView.dataSource = self
+        tableView.delegate = self
 
         // Do any additional setup after loading the view.
         print("Hello")
@@ -28,17 +36,34 @@ class MoviesViewController: UIViewController {
                 
             self.movies = dataDictionary["results"] as! [[String:Any]]
             
-            
-            
             print(dataDictionary)
               
               // TODO: Get the array of movies
               // TODO: Store the movies in a property to use elsewhere
               // TODO: Reload your table view data
+            //MUST HAVE THIS
+            self.tableView.reloadData()
 
            }
         }
         task.resume()
+    }
+    /*Step #2 Adding both function that make the classes run*/
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = UITableViewCell()
+        
+        let movie = movies[indexPath.row]
+        let title = movie["title"] as! String
+        
+        cell.textLabel!.text = title
+        
+        return cell
     }
     
 
